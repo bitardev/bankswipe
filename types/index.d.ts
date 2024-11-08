@@ -60,7 +60,7 @@ declare type Account = {
   type: string;
   subtype: string;
   appwriteItemId: string;
-  sharableId: string;
+  shareableId: string;
 };
 
 declare type Transaction = {
@@ -89,7 +89,7 @@ declare type Bank = {
   accessToken: string;
   fundingSourceUrl: string;
   userId: string;
-  sharableId: string;
+  shareableId: string;
 };
 
 declare type AccountTypes =
@@ -194,7 +194,7 @@ declare interface AuthFormProps {
 
 declare interface BankDropdownProps {
   accounts: Account[];
-  setValue?: UseFormSetValue<unknown>;
+  setValue?: UseFormSetValue<any>;
   otherStyles?: string;
 }
 
@@ -203,7 +203,7 @@ declare interface BankTabItemProps {
   appwriteItemId?: string;
 }
 
-declare interface TotlaBalanceBoxProps {
+declare interface TotalBalanceBoxProps {
   accounts: Account[];
   totalBanks: number;
   totalCurrentBalance: number;
@@ -211,7 +211,7 @@ declare interface TotlaBalanceBoxProps {
 
 declare interface FooterProps {
   user: User;
-  type?: "mobile" | "desktop";
+  type?: 'mobile' | 'desktop'
 }
 
 declare interface RightSidebarProps {
