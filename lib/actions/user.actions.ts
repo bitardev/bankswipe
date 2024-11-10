@@ -132,6 +132,7 @@ export const logoutAccount = async () => {
 
     await account.deleteSession("current");
   } catch (error) {
+    console.log(error);
     return null;
   }
 };
@@ -144,14 +145,14 @@ export const createLinkToken = async (user: User) => {
         phone_number: "+1 415 5550123",
       },
       // client_name: `${user.firstName} ${user.lastName}`,
-      client_name: "Personal Finance App",
+      client_name: "Bank Swipe App",
       // products: ['auth'] as Products[],
       products: ["auth", "transactions"] as Products[],
       // transactions: {
       //   days_requested: 730,
       // },
-      language: "en",
-      country_codes: ["US"] as CountryCode[]
+      language: "fr",
+      country_codes: ["FR"] as CountryCode[],
     };
 
     const response = await plaidClient.linkTokenCreate(tokenParams);
