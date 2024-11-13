@@ -20,6 +20,8 @@ const AuthForm = ({ type }: { type: string }) => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showCredentialError, setShowCredentialError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const formSchema = authFormSchema(type);
 
@@ -63,8 +65,15 @@ const AuthForm = ({ type }: { type: string }) => {
           email: data.email,
           password: data.password,
         });
-
-        if (response) router.push("/");
+        console.log(response);
+        if (response?.code && response?.code === 401) {
+          setShowCredentialError(true);
+          setErrorMessage(response?.response?.message);
+        } else {
+          setShowCredentialError(false);
+          setErrorMessage("");
+          router.push("/");
+        }
       }
     } catch (error) {
       console.log(error);
@@ -193,6 +202,11 @@ const AuthForm = ({ type }: { type: string }) => {
                     "Sign Up"
                   )}
                 </Button>
+              </div>
+              <div className="text-center">
+                {showCredentialError ? (
+                  <p className="form-message mt-2">{errorMessage}</p>
+                ) : ""}
               </div>
             </form>
           </Form>
