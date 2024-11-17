@@ -152,8 +152,8 @@ export const createLinkToken = async (user: User) => {
       // transactions: {
       //   days_requested: 730,
       // },
-      language: "fr",
-      country_codes: ["FR"] as CountryCode[],
+      language: "en",
+      country_codes: ["US"] as CountryCode[],
     };
 
     const response = await plaidClient.linkTokenCreate(tokenParams);

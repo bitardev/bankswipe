@@ -15,9 +15,7 @@ import { Loader2 } from "lucide-react";
 
 const PlaidLink = ({ user, variant }: PlaidLinkProps) => {
   const router = useRouter();
-
   const [token, setToken] = useState("");
-
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

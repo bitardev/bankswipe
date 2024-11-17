@@ -8,13 +8,30 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import CustomInput from "./CustomInput";
 import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, signUp } from "@/lib/actions/user.actions";
 import PlaidLink from "./PlaidLink";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import CustomStatesSelect from "./CustomStatesSelect";
+import { states } from "@/lib/actions/states";
+import { statesOfUnitedStates } from "@/lib/constants";
 
 const AuthForm = ({ type }: { type: string }) => {
   const router = useRouter();
@@ -31,6 +48,14 @@ const AuthForm = ({ type }: { type: string }) => {
     defaultValues: {
       email: "",
       password: "",
+      firstName: "",
+      lastName: "",
+      address1: "",
+      city: "",
+      state: "",
+      postalCode: "",
+      dateOfBirth: "",
+      ssn: "",
     },
   });
 
@@ -138,18 +163,19 @@ const AuthForm = ({ type }: { type: string }) => {
                     label="Address"
                     placeholder="Enter your specific address"
                   />
-                  <CustomInput
+                  <CustomStatesSelect
                     control={form.control}
-                    name="city"
-                    label="City"
-                    placeholder="Enter your city"
+                    name="state"
+                    label="State"
+                    placeholder="Select a state"
+                    list={statesOfUnitedStates}
                   />
                   <div className="flex gap-4">
                     <CustomInput
                       control={form.control}
-                      name="state"
-                      label="State"
-                      placeholder="Example: NY"
+                      name="city"
+                      label="City"
+                      placeholder="Enter your city"
                     />
                     <CustomInput
                       control={form.control}
@@ -206,7 +232,9 @@ const AuthForm = ({ type }: { type: string }) => {
               <div className="text-center">
                 {showCredentialError ? (
                   <p className="form-message mt-2">{errorMessage}</p>
-                ) : ""}
+                ) : (
+                  ""
+                )}
               </div>
             </form>
           </Form>
