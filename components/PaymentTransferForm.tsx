@@ -10,7 +10,7 @@ import * as z from "zod";
 import { createTransfer } from "@/lib/actions/dwolla.actions";
 import { createTransaction } from "@/lib/actions/transaction.actions";
 import { getBank, getBankByAccountId } from "@/lib/actions/user.actions";
-import { decryptId } from "@/lib/utils";
+import { decryptId, formatAmount } from "@/lib/utils";
 
 import { BankDropdown } from "./BankDropdown";
 import { Button } from "./ui/button";
@@ -25,11 +25,18 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
   name: z.string().min(4, "Transfer note is too short"),
-  amount: z.string().min(4, "Amount is too short"),
+  amount: z.string().min(1, "Amount is too short"),
   senderBank: z.string().min(4, "Please select a valid bank account"),
   sharableId: z.string().min(8, "Please select a valid sharable Id"),
 });
@@ -37,6 +44,8 @@ const formSchema = z.object({
 const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
+  console.log("--------------debug paymenttransfer start");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,7 +60,7 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
 
   const submit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-
+    console.log("--------------debug submit");
     try {
       const receiverAccountId = decryptId(data.sharableId);
       const receiverBank = await getBankByAccountId({
@@ -64,8 +73,14 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
         destinationFundingSourceUrl: receiverBank.fundingSourceUrl,
         amount: data.amount,
       };
+
+      console.log("--------------debug transferParams");
+      console.log(transferParams);
       // create transfer
       const transfer = await createTransfer(transferParams);
+
+      console.log("--------------debug transfer");
+      console.log(transfer);
 
       // create transfer transaction
       if (transfer) {
@@ -79,12 +94,13 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
           email: data.email,
         };
 
-        const newTransaction = await createTransaction(transaction);
+        // const newTransaction =
+        await createTransaction(transaction);
 
-        if (newTransaction) {
-          form.reset();
-          router.push("/");
-        }
+        // if (newTransaction) {
+        //   form.reset();
+        //   router.push("/");
+        // }
       }
     } catch (error) {
       console.error("Submitting create transfer request failed: ", error);
@@ -112,11 +128,34 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
                 </div>
                 <div className="flex w-full flex-col">
                   <FormControl>
-                    <BankDropdown
+                    {/* <BankDropdown
                       accounts={accounts}
                       setValue={form.setValue}
                       otherStyles="!w-full"
-                    />
+                    /> */}
+                    <Select>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Source Bank" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="form-item bg-white">
+                        {accounts.map((a) => (
+                          <SelectItem
+                            value={a.appwriteItemId}
+                            key={a.id}
+                            className="cursor-pointer border-t"
+                          >
+                            <div className="flex flex-col ">
+                              <p className="text-16 font-medium">{a.name}</p>
+                              <p className="text-14 font-medium text-blue-600">
+                                {formatAmount(a.currentBalance)}
+                              </p>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage className="text-12 text-red-500" />
                 </div>

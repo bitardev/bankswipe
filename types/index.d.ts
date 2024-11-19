@@ -61,6 +61,7 @@ declare type Account = {
   subtype: string;
   appwriteItemId: string;
   shareableId: string;
+  sharaebleId?: string;
 };
 
 declare type Transaction = {
@@ -68,9 +69,8 @@ declare type Transaction = {
   $id: string;
   name: string;
   paymentChannel: string;
-  type: string;
   accountId: string;
-  amount: number;
+  amount: string;
   pending: boolean;
   category: string;
   date: string;

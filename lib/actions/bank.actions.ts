@@ -50,9 +50,6 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
       })
     );
 
-    console.log("-----------debug");
-    console.log(accounts);
-
     const accountsData = accounts[0];
     const totalBanks = accountsData.length;
     const totalCurrentBalance = accountsData.reduce((total, account) => {

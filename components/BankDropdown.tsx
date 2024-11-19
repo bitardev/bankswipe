@@ -23,6 +23,9 @@ export const BankDropdown = ({
   const router = useRouter();
   const [selected, setSeclected] = useState(accounts[0]);
 
+  console.log("--------------- debug dropdown accounts");
+  console.log(accounts);
+
   const handleBankChange = (id: string) => {
     const account = accounts.find((account) => account.appwriteItemId === id)!;
 
@@ -63,19 +66,20 @@ export const BankDropdown = ({
           <SelectLabel className="py-2 font-normal text-gray-500">
             Select a bank to display
           </SelectLabel>
-          {accounts.map((account: Account) => (
-            <SelectItem
-              key={account.id}
-              value={account.appwriteItemId}
-              className="cursor-pointer border-t"
-            >
-              <div className="flex flex-col ">
-                <p className="text-16 font-medium">{account.name}</p>
-                <p className="text-14 font-medium text-blue-600">
-                  {formatAmount(account.currentBalance)}
-                </p>
-              </div>
-            </SelectItem>
+          {accounts.map((account: Account, index) => (
+            <div key={index}>
+              <SelectItem
+                value={account.appwriteItemId}
+                className="cursor-pointer border-t"
+              >
+                <div className="flex flex-col ">
+                  <p className="text-16 font-medium">{account.name}</p>
+                  <p className="text-14 font-medium text-blue-600">
+                    {formatAmount(account.currentBalance)}
+                  </p>
+                </div>
+              </SelectItem>
+            </div>
           ))}
         </SelectGroup>
       </SelectContent>
